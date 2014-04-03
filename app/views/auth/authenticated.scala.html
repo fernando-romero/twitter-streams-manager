@@ -1,0 +1,12 @@
+@(widgetURL: String)(implicit request: RequestHeader)
+
+@import helper._
+
+@securesocial_main("Authenticated") {
+    <script type="text/javascript">
+        @if(widgetURL.nonEmpty) {
+            //top.location.replace("@widgetURL".fromHex());
+            location.replace("@widgetURL".fromHex());
+        }
+    </script>
+}
