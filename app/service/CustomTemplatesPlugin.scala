@@ -13,7 +13,7 @@ class CustomTemplatesPlugin(application: play.Application) extends TemplatesPlug
 {
   def getAlreadyRegisteredEmail(user: securesocial.core.Identity)(implicit request: play.api.mvc.RequestHeader): (Option[play.api.templates.Txt], Option[play.api.templates.Html]) = ???
   def getLoginPage(form: play.api.data.Form[(String, String)],msg: Option[String])(implicit request: play.api.mvc.Request[play.api.mvc.AnyContent]): play.api.templates.Html = {
-    views.html.auth.dummy()
+    views.html.auth.login(form, msg)
   }
   def getNotAuthorizedPage(implicit request: play.api.mvc.Request[play.api.mvc.AnyContent]): play.api.templates.Html = ???
   def getPasswordChangePage(form: play.api.data.Form[securesocial.controllers.PasswordChange.ChangeInfo])(implicit request: securesocial.core.SecuredRequest[play.api.mvc.AnyContent]): play.api.templates.Html = ???

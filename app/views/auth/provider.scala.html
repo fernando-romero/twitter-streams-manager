@@ -1,76 +1,76 @@
 @(providerId: String, loginForm: Option[Form[(String, String)]] = None)(implicit request: RequestHeader)
 
-    @import securesocial.core.Registry
-    @import securesocial.core.IdentityProvider
-    @import securesocial.core.providers.UsernamePasswordProvider
-    @import securesocial.core.AuthenticationMethod._
-    @import securesocial.core.providers.utils.RoutesHelper
-    @import play.api.Logger
-    @import helper._
-    @import play.api.Play._
+@import securesocial.core.Registry
+@import securesocial.core.IdentityProvider
+@import securesocial.core.providers.UsernamePasswordProvider
+@import securesocial.core.AuthenticationMethod._
+@import securesocial.core.providers.utils.RoutesHelper
+@import play.api.Logger
+@import helper._
+@import play.api.Play._
 
-    @implicitFieldConstructor = @{FieldConstructor(securesocial.views.html.inputFieldConstructor.f) }
-    @environment = @{ current.configuration.getString("bneq.environment").getOrElse("") }
+@implicitFieldConstructor = @{FieldConstructor(securesocial.views.html.inputFieldConstructor.f) }
+@environment = @{ current.configuration.getString("bneq.environment").getOrElse("") }
 
-    @Registry.providers.get(providerId).map { provider =>
-            @if(provider.authMethod == OAuth1 || provider.authMethod == OAuth2) {
-                @defining("securesocial/images/providers/%s.png".format(provider.id)) { imageUrl =>
-                    <a id="authwin"> <img src="@RoutesHelper.at(imageUrl)"/>&nbsp;<span>
-                        Authenticate with LinkedIn</span></a>
-                    <script type="text/javascript">
-                    ( function() {
-                        $('#authwin').on('click', function() {
-                            window.open("@{provider.authenticationUrl}", "_top");
-                        }).css({ cursor: 'pointer' });
-                    } () );
-                    </script>
-                }
+@Registry.providers.get(providerId).map { provider =>
+        @if(provider.authMethod == OAuth1 || provider.authMethod == OAuth2) {
+            @defining("securesocial/images/providers/%s.png".format(provider.id)) { imageUrl =>
+                <a id="authwin"> <img src="@RoutesHelper.at(imageUrl)"/>&nbsp;<span>
+                    Authenticate with LinkedIn</span></a>
+                <script type="text/javascript">
+                ( function() {
+                    $('#authwin').on('click', function() {
+                        window.open("@{provider.authenticationUrl}", "_top");
+                    }).css({ cursor: 'pointer' });
+                } () );
+                </script>
             }
+        }
 
-            @if(provider.authMethod == UserPassword) {
-                <form action = "@securesocial.core.providers.utils.RoutesHelper.authenticateByPost("userpass").absoluteURL(IdentityProvider.sslEnabled)"
-                class="form-horizontal" autocomplete="off" method="POST">
-                    <fieldset>
+        @if(provider.authMethod == UserPassword) {
+            <form action = "@securesocial.core.providers.utils.RoutesHelper.authenticateByPost("userpass").absoluteURL(IdentityProvider.sslEnabled)"
+            class="form-horizontal" autocomplete="off" method="POST">
+                <fieldset>
 
-                        @if(UsernamePasswordProvider.withUserNameSupport) {
-                            @helper.inputText(
-                                loginForm.get("username"),
-                                '_label -> Messages("securesocial.signup.username"),
-                                'class -> "input-xlarge",
-                                '_help -> ""
-                            )
-                        } else {
-                            @helper.inputText(
-                                loginForm.get("username"),
-                                '_label -> Messages("securesocial.signup.email1"),
-                                'class -> "input-xlarge",
-                                '_help -> ""
-                            )
-                        }
-
-                        @helper.inputPassword(
-                            loginForm.get("password"),
-                            '_label -> Messages("securesocial.signup.password1"),
+                    @if(UsernamePasswordProvider.withUserNameSupport) {
+                        @helper.inputText(
+                            loginForm.get("username"),
+                            '_label -> Messages("securesocial.signup.username"),
                             'class -> "input-xlarge",
                             '_help -> ""
                         )
+                    } else {
+                        @helper.inputText(
+                            loginForm.get("username"),
+                            '_label -> Messages("securesocial.signup.email1"),
+                            'class -> "input-xlarge",
+                            '_help -> ""
+                        )
+                    }
 
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">@Messages("securesocial.login.title")</button>
-                        </div>
-                        <div class="clearfix">
-                            <a href="@securesocial.core.providers.utils.RoutesHelper.startResetPassword()"><p>@Messages("securesocial.login.forgotPassword") </a></p>
-                        </div>
-                        <div class="clearfix">
-                            <p>@Messages("securesocial.login.signUp") <a href="@securesocial.core.providers.utils.RoutesHelper.startSignUp()">@Messages("securesocial.login.here")</a></p>
-                        </div>
-                    </fieldset>
-                </form>
-            }
-    }.getOrElse {
-        @*****************************************
-        * Todo: throw a runtime exception? this might need improvement
-        *****************************************@
-        @Logger.error("[securesocial] unknown provider '%s'. Can't render it.".format(providerId))
-        { throw new RuntimeException("Unknown provider '%s') }
-    }
+                    @helper.inputPassword(
+                        loginForm.get("password"),
+                        '_label -> Messages("securesocial.signup.password1"),
+                        'class -> "input-xlarge",
+                        '_help -> ""
+                    )
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">@Messages("securesocial.login.title")</button>
+                    </div>
+                    <div class="clearfix">
+                        <a href="@securesocial.core.providers.utils.RoutesHelper.startResetPassword()"><p>@Messages("securesocial.login.forgotPassword") </a></p>
+                    </div>
+                    <div class="clearfix">
+                        <p>@Messages("securesocial.login.signUp") <a href="@securesocial.core.providers.utils.RoutesHelper.startSignUp()">@Messages("securesocial.login.here")</a></p>
+                    </div>
+                </fieldset>
+            </form>
+        }
+}.getOrElse {
+    @*****************************************
+    * Todo: throw a runtime exception? this might need improvement
+    *****************************************@
+    @Logger.error("[securesocial] unknown provider '%s'. Can't render it.".format(providerId))
+    { throw new RuntimeException("Unknown provider '%s') }
+}
