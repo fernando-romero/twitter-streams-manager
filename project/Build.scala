@@ -12,12 +12,16 @@ object ApplicationBuild extends Build {
     "com.novus" %% "salat" % salatVersion ,
     "com.novus" %% "salat-core" % salatVersion,
     "org.mongodb" %% "casbah-core" % "2.5.0",
-    "org.elasticsearch" % "elasticsearch" % "1.0.1"
+    "org.elasticsearch" % "elasticsearch" % "1.0.1",
+    //"ws.securesocial" %% "securesocial" % "2.1.3"
+    "ws.securesocial" %% "securesocial" % "master-SNAPSHOT"
   )
 
   val main = play.Project(appName, appVersion, appDependencies)
     .settings(
       resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.github.com/releases/"))(Resolver.ivyStylePatterns),
-      resolvers += "Sedis Repo" at "http://pk11-scratch.googlecode.com/svn/trunk"
+      resolvers += "Sedis Repo" at "http://pk11-scratch.googlecode.com/svn/trunk",
+      //resolvers += Resolver.sonatypeRepo("releases")
+      resolvers += Resolver.sonatypeRepo("snapshots")
     )
 }

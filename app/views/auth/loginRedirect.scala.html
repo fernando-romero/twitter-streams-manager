@@ -1,0 +1,9 @@
+@(widgetURL: String)(implicit request: RequestHeader)
+
+<script type="text/javascript">
+    @if(widgetURL.nonEmpty) {
+        top.location.replace("/login");
+    } else {
+        location.location = '/oops';
+    }
+</script>
